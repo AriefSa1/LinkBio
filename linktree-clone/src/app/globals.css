@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* Scrollbar halus */
+* {
+  scrollbar-width: thin;
+}
+
+/* Stagger reveal untuk daftar link di halaman publik */
+.link-stagger > * {
+  opacity: 0;
+  animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.link-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.link-stagger > *:nth-child(2) { animation-delay: 0.12s; }
+.link-stagger > *:nth-child(3) { animation-delay: 0.19s; }
+.link-stagger > *:nth-child(4) { animation-delay: 0.26s; }
+.link-stagger > *:nth-child(5) { animation-delay: 0.33s; }
+.link-stagger > *:nth-child(6) { animation-delay: 0.40s; }
+.link-stagger > *:nth-child(7) { animation-delay: 0.47s; }
+.link-stagger > *:nth-child(8) { animation-delay: 0.54s; }
+.link-stagger > *:nth-child(n + 9) { animation-delay: 0.6s; }
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

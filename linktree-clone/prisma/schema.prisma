@@ -1,0 +1,38 @@
+// Prisma schema untuk Linktree clone
+// Dokumentasi: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String // di-hash dengan bcrypt
+  name      String?
+  bio       String?  @db.VarChar(255)
+  avatarUrl String?  @db.VarChar(500)
+  theme     String   @default("midnight")
+  links     Link[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Link {
+  id        String   @id @default(cuid())
+  title     String
+  url       String   @db.VarChar(500)
+  active    Boolean  @default(true)
+  order     Int      @default(0)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}

@@ -1,0 +1,77 @@
+// Tema visual untuk halaman publik. Bisa ditambah sesuai selera.
+// Tidak memakai "server-only" karena dipakai juga di komponen client (preview).
+
+export type Theme = {
+  id: string;
+  label: string;
+  page: string; // class untuk background halaman
+  card: string; // class untuk kartu utama
+  text: string; // warna teks utama
+  subtext: string; // warna teks sekunder
+  button: string; // class untuk tombol link
+  preview: string; // warna kecil untuk pemilih tema
+};
+
+export const THEMES: Record<string, Theme> = {
+  midnight: {
+    id: "midnight",
+    label: "Midnight",
+    page: "bg-[radial-gradient(120%_120%_at_50%_0%,#1e293b_0%,#0f172a_45%,#020617_100%)]",
+    card: "",
+    text: "text-slate-50",
+    subtext: "text-slate-400",
+    button:
+      "bg-white/5 border border-white/10 text-slate-100 hover:bg-white/10 hover:border-white/20 backdrop-blur",
+    preview: "bg-slate-900",
+  },
+  sunset: {
+    id: "sunset",
+    label: "Sunset",
+    page: "bg-[radial-gradient(120%_120%_at_50%_0%,#fb7185_0%,#f97316_45%,#7c2d12_100%)]",
+    card: "",
+    text: "text-orange-50",
+    subtext: "text-orange-100/70",
+    button:
+      "bg-white/15 border border-white/25 text-white hover:bg-white/25 backdrop-blur",
+    preview: "bg-orange-500",
+  },
+  forest: {
+    id: "forest",
+    label: "Forest",
+    page: "bg-[radial-gradient(120%_120%_at_50%_0%,#34d399_0%,#059669_45%,#064e3b_100%)]",
+    card: "",
+    text: "text-emerald-50",
+    subtext: "text-emerald-100/70",
+    button:
+      "bg-white/15 border border-white/25 text-white hover:bg-white/25 backdrop-blur",
+    preview: "bg-emerald-500",
+  },
+  mono: {
+    id: "mono",
+    label: "Mono",
+    page: "bg-neutral-100",
+    card: "",
+    text: "text-neutral-900",
+    subtext: "text-neutral-500",
+    button:
+      "bg-white border border-neutral-200 text-neutral-900 hover:border-neutral-900 shadow-sm",
+    preview: "bg-neutral-900",
+  },
+  grape: {
+    id: "grape",
+    label: "Grape",
+    page: "bg-[radial-gradient(120%_120%_at_50%_0%,#a78bfa_0%,#7c3aed_45%,#2e1065_100%)]",
+    card: "",
+    text: "text-violet-50",
+    subtext: "text-violet-200/70",
+    button:
+      "bg-white/15 border border-white/25 text-white hover:bg-white/25 backdrop-blur",
+    preview: "bg-violet-600",
+  },
+};
+
+export const DEFAULT_THEME = "midnight";
+
+export function getTheme(id?: string | null): Theme {
+  return THEMES[id ?? ""] ?? THEMES[DEFAULT_THEME];
+}

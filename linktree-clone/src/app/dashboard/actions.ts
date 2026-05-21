@@ -1,0 +1,138 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { prisma } from "@/lib/prisma";
+import { getCurrentUser, normalizeUrl } from "@/lib/auth";
+import { THEMES, DEFAULT_THEME } from "@/lib/themes";
+
+/** Revalidasi dashboard + halaman publik user agar tampilan ikut ter-update. */
+function refresh(username: string) {
+  revalidatePath("/dashboard");
+  revalidatePath(`/${username}`);
+}
+
+export async function updateProfile(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const name = String(formData.get("name") ?? "").trim().slice(0, 60);
+  const bio = String(formData.get("bio") ?? "").trim().slice(0, 200);
+  const avatarUrl = String(formData.get("avatarUrl") ?? "").trim();
+  let theme = String(formData.get("theme") ?? "").trim();
+  if (!THEMES[theme]) theme = DEFAULT_THEME;
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      name: name || user.username,
+      bio: bio || null,
+      avatarUrl: avatarUrl ? normalizeUrl(avatarUrl) : null,
+      theme,
+    },
+  });
+
+  refresh(user.username);
+}
+
+export async function addLink(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const title = String(formData.get("title") ?? "").trim().slice(0, 80);
+  const rawUrl = String(formData.get("url") ?? "").trim();
+  if (!title || !rawUrl) return;
+
+  const count = await prisma.link.count({ where: { userId: user.id } });
+
+  await prisma.link.create({
+    data: {
+      title,
+      url: normalizeUrl(rawUrl),
+      order: count,
+      userId: user.id,
+    },
+  });
+
+  refresh(user.username);
+}
+
+export async function updateLink(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const id = String(formData.get("id") ?? "");
+  const title = String(formData.get("title") ?? "").trim().slice(0, 80);
+  const rawUrl = String(formData.get("url") ?? "").trim();
+  if (!id || !title || !rawUrl) return;
+
+  // updateMany dengan filter userId => hanya bisa mengubah link milik sendiri
+  await prisma.link.updateMany({
+    where: { id, userId: user.id },
+    data: { title, url: normalizeUrl(rawUrl) },
+  });
+
+  refresh(user.username);
+}
+
+export async function toggleLink(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const id = String(formData.get("id") ?? "");
+  const link = await prisma.link.findFirst({ where: { id, userId: user.id } });
+  if (!link) return;
+
+  await prisma.link.update({
+    where: { id: link.id },
+    data: { active: !link.active },
+  });
+
+  refresh(user.username);
+}
+
+export async function deleteLink(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const id = String(formData.get("id") ?? "");
+  // deleteMany dengan filter userId => aman, hanya hapus milik sendiri
+  await prisma.link.deleteMany({ where: { id, userId: user.id } });
+
+  refresh(user.username);
+}
+
+export async function moveLink(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const id = String(formData.get("id") ?? "");
+  const direction = String(formData.get("direction") ?? ""); // "up" | "down"
+
+  const links = await prisma.link.findMany({
+    where: { userId: user.id },
+    orderBy: { order: "asc" },
+  });
+
+  const index = links.findIndex((l) => l.id === id);
+  if (index === -1) return;
+
+  const swapWith = direction === "up" ? index - 1 : index + 1;
+  if (swapWith < 0 || swapWith >= links.length) return;
+
+  const current = links[index];
+  const neighbor = links[swapWith];
+
+  // Tukar nilai order keduanya dalam satu transaksi
+  await prisma.$transaction([
+    prisma.link.update({
+      where: { id: current.id },
+      data: { order: neighbor.order },
+    }),
+    prisma.link.update({
+      where: { id: neighbor.id },
+      data: { order: current.order },
+    }),
+  ]);
+
+  refresh(user.username);
+}
