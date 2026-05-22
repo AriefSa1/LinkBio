@@ -32,16 +32,17 @@ export default async function PublicProfile({ params }: Props) {
 
   const theme = getTheme(user.theme);
   const initial = (user.name ?? user.username).charAt(0).toUpperCase();
+  const avatarSrc = user.avatarData ?? user.avatarUrl;
 
   return (
     <main className={`min-h-dvh ${theme.page} px-5 py-16`}>
       <div className="mx-auto flex max-w-md flex-col items-center">
         {/* Avatar */}
         <div className="animate-rise">
-          {user.avatarUrl ? (
+          {avatarSrc ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={user.avatarUrl}
+              src={avatarSrc}
               alt={user.name ?? user.username}
               className="h-24 w-24 rounded-full border-2 border-white/20 object-cover shadow-xl"
             />

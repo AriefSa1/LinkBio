@@ -12,6 +12,7 @@ import {
   moveLink,
 } from "./actions";
 import { SubmitButton } from "@/components/SubmitButton";
+import { AvatarUpload } from "@/components/AvatarUpload";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -28,6 +29,14 @@ export default async function DashboardPage() {
             ✦ Dashboard
           </span>
           <div className="flex items-center gap-2">
+            {user.isAdmin && (
+              <Link
+                href="/admin"
+                className="rounded-lg bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-neutral-700"
+              >
+                Admin
+              </Link>
+            )}
             <Link
               href={`/${user.username}`}
               target="_blank"
@@ -93,20 +102,10 @@ export default async function DashboardPage() {
               />
             </label>
 
-            <label className="block">
-              <span className="mb-1.5 block text-sm font-medium">
-                URL foto profil
-              </span>
-              <input
-                name="avatarUrl"
-                defaultValue={user.avatarUrl ?? ""}
-                placeholder="https://…/foto.jpg"
-                className="w-full rounded-lg border border-neutral-300 px-3.5 py-2.5 outline-none transition focus:border-neutral-900"
-              />
-              <span className="mt-1 block text-xs text-neutral-400">
-                Tempel link gambar. (Upload file bisa ditambahkan nanti.)
-              </span>
-            </label>
+            <AvatarUpload
+              initialSrc={user.avatarData ?? user.avatarUrl ?? null}
+              name={user.name ?? user.username}
+            />
 
             <div>
               <span className="mb-2 block text-sm font-medium">Tema</span>

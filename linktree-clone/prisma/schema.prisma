@@ -11,17 +11,19 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  email     String   @unique
-  password  String // di-hash dengan bcrypt
-  name      String?
-  bio       String?  @db.VarChar(255)
-  avatarUrl String?  @db.VarChar(500)
-  theme     String   @default("midnight")
-  links     Link[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  username   String   @unique
+  email      String   @unique
+  password   String // di-hash dengan bcrypt
+  name       String?
+  bio        String?  @db.VarChar(255)
+  avatarUrl  String?  @db.VarChar(500)
+  avatarData String?  @db.LongText // foto hasil upload (data URL base64)
+  theme      String   @default("midnight")
+  isAdmin    Boolean  @default(false)
+  links      Link[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Link {

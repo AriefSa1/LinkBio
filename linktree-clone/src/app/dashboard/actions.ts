@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, normalizeUrl } from "@/lib/auth";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
@@ -17,19 +18,31 @@ export async function updateProfile(formData: FormData) {
 
   const name = String(formData.get("name") ?? "").trim().slice(0, 60);
   const bio = String(formData.get("bio") ?? "").trim().slice(0, 200);
-  const avatarUrl = String(formData.get("avatarUrl") ?? "").trim();
   let theme = String(formData.get("theme") ?? "").trim();
   if (!THEMES[theme]) theme = DEFAULT_THEME;
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      name: name || user.username,
-      bio: bio || null,
-      avatarUrl: avatarUrl ? normalizeUrl(avatarUrl) : null,
-      theme,
-    },
-  });
+  const avatarData = String(formData.get("avatarData") ?? "");
+  const avatarRemove = String(formData.get("avatarRemove") ?? "") === "1";
+
+  const data: Prisma.UserUpdateInput = {
+    name: name || user.username,
+    bio: bio || null,
+    theme,
+  };
+
+  if (avatarRemove) {
+    // Hapus foto (baik yang di-upload maupun URL)
+    data.avatarData = null;
+    data.avatarUrl = null;
+  } else if (avatarData) {
+    // Foto baru di-upload. Validasi ringan: harus data URL gambar & wajar ukurannya.
+    if (avatarData.startsWith("data:image/") && avatarData.length < 3_000_000) {
+      data.avatarData = avatarData;
+    }
+  }
+  // Jika tidak ada perubahan foto, biarkan foto lama apa adanya.
+
+  await prisma.user.update({ where: { id: user.id }, data });
 
   refresh(user.username);
 }

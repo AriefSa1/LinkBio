@@ -18,8 +18,11 @@ export async function middleware(req: NextRequest) {
   const authed = await isValidSession(token);
   const { pathname } = req.nextUrl;
 
-  // Halaman dashboard butuh login
-  if (pathname.startsWith("/dashboard") && !authed) {
+  // Halaman dashboard & admin butuh login
+  if (
+    (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) &&
+    !authed
+  ) {
     const url = new URL("/login", req.url);
     url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
@@ -34,5 +37,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/login", "/register"],
 };

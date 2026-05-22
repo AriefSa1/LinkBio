@@ -17,6 +17,7 @@ async function main() {
       bio: "Halo! Ini contoh halaman link ala Linktree. Login sebagai demo untuk mengeditnya.",
       avatarUrl: "https://api.dicebear.com/9.x/notionists/svg?seed=Demo",
       theme: "midnight",
+      isAdmin: true,
       links: {
         create: [
           { title: "Website Pribadi", url: "https://example.com", order: 0 },
