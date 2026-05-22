@@ -13,6 +13,7 @@ import {
 import { SubmitButton } from "@/components/SubmitButton";
 import { AvatarUpload } from "@/components/AvatarUpload";
 import { AppearanceEditor } from "@/components/AppearanceEditor";
+import { IconPicker } from "@/components/IconPicker";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -131,8 +132,9 @@ export default async function DashboardPage() {
           <h2 className="font-display text-xl font-bold">Tambah link</h2>
           <form
             action={addLink}
-            className="mt-4 flex flex-col gap-3 sm:flex-row"
+            className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start"
           >
+            <IconPicker name="icon" initial="auto" />
             <input
               name="title"
               required
@@ -247,9 +249,13 @@ export default async function DashboardPage() {
                     </summary>
                     <form
                       action={updateLink}
-                      className="mt-3 flex flex-col gap-2 sm:flex-row"
+                      className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-start"
                     >
                       <input type="hidden" name="id" value={link.id} />
+                      <IconPicker
+                        name="icon"
+                        initial={link.icon ?? "auto"}
+                      />
                       <input
                         name="title"
                         defaultValue={link.title}

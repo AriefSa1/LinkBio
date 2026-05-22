@@ -20,9 +20,9 @@ async function main() {
       isAdmin: true,
       links: {
         create: [
-          { title: "Website Pribadi", url: "https://example.com", order: 0 },
-          { title: "Instagram", url: "https://instagram.com", order: 1 },
-          { title: "YouTube", url: "https://youtube.com", order: 2 },
+          { title: "Website Pribadi", url: "https://example.com", icon: "link", order: 0 },
+          { title: "Instagram", url: "https://instagram.com", icon: "instagram", order: 1 },
+          { title: "YouTube", url: "https://youtube.com", icon: "youtube", order: 2 },
           { title: "Kirim Email", url: "mailto:demo@example.com", order: 3 },
         ],
       },

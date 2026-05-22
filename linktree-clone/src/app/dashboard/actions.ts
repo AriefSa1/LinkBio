@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, normalizeUrl } from "@/lib/auth";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
+import { iconChoiceToDb } from "@/lib/link-icons";
 
 /** Revalidasi dashboard + halaman publik user agar tampilan ikut ter-update. */
 function refresh(username: string) {
@@ -76,12 +77,14 @@ export async function addLink(formData: FormData) {
   const rawUrl = String(formData.get("url") ?? "").trim();
   if (!title || !rawUrl) return;
 
+  const icon = iconChoiceToDb(String(formData.get("icon") ?? "auto"));
   const count = await prisma.link.count({ where: { userId: user.id } });
 
   await prisma.link.create({
     data: {
       title,
       url: normalizeUrl(rawUrl),
+      icon,
       order: count,
       userId: user.id,
     },
@@ -99,10 +102,12 @@ export async function updateLink(formData: FormData) {
   const rawUrl = String(formData.get("url") ?? "").trim();
   if (!id || !title || !rawUrl) return;
 
+  const icon = iconChoiceToDb(String(formData.get("icon") ?? "auto"));
+
   // updateMany dengan filter userId => hanya bisa mengubah link milik sendiri
   await prisma.link.updateMany({
     where: { id, userId: user.id },
-    data: { title, url: normalizeUrl(rawUrl) },
+    data: { title, url: normalizeUrl(rawUrl), icon },
   });
 
   refresh(user.username);

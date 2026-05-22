@@ -30,6 +30,7 @@ CREATE TABLE `Link` (
   `id`        VARCHAR(191) NOT NULL,
   `title`     VARCHAR(191) NOT NULL,
   `url`       VARCHAR(500) NOT NULL,
+  `icon`      VARCHAR(32)  NULL,
   `active`    BOOLEAN      NOT NULL DEFAULT true,
   `order`     INTEGER      NOT NULL DEFAULT 0,
   `userId`    VARCHAR(191) NOT NULL,

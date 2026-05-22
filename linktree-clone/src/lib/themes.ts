@@ -9,6 +9,7 @@ export type Theme = {
   text: string; // warna teks utama
   subtext: string; // warna teks sekunder
   button: string; // class untuk tombol link
+  badge: string; // class untuk lingkaran ikon di tombol
   preview: string; // warna kecil untuk pemilih tema
 };
 
@@ -22,7 +23,20 @@ export const THEMES: Record<string, Theme> = {
     subtext: "text-slate-400",
     button:
       "bg-white/5 border border-white/10 text-slate-100 hover:bg-white/10 hover:border-white/20 backdrop-blur",
+    badge: "bg-white/15 text-white",
     preview: "bg-slate-900",
+  },
+  ocean: {
+    id: "ocean",
+    label: "Ocean",
+    page: "bg-[radial-gradient(120%_120%_at_50%_0%,#eff6ff_0%,#dbeafe_55%,#bfdbfe_100%)]",
+    card: "bg-white border border-blue-100 shadow-blue-200/40",
+    text: "text-slate-900",
+    subtext: "text-slate-500",
+    button:
+      "bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-500/25",
+    badge: "bg-white/25 text-white",
+    preview: "bg-blue-600",
   },
   sunset: {
     id: "sunset",
@@ -33,6 +47,7 @@ export const THEMES: Record<string, Theme> = {
     subtext: "text-orange-100/70",
     button:
       "bg-white/15 border border-white/25 text-white hover:bg-white/25 backdrop-blur",
+    badge: "bg-white/25 text-white",
     preview: "bg-orange-500",
   },
   forest: {
@@ -44,6 +59,7 @@ export const THEMES: Record<string, Theme> = {
     subtext: "text-emerald-100/70",
     button:
       "bg-white/15 border border-white/25 text-white hover:bg-white/25 backdrop-blur",
+    badge: "bg-white/25 text-white",
     preview: "bg-emerald-500",
   },
   mono: {
@@ -55,6 +71,7 @@ export const THEMES: Record<string, Theme> = {
     subtext: "text-neutral-500",
     button:
       "bg-white border border-neutral-200 text-neutral-900 hover:border-neutral-900 shadow-sm",
+    badge: "bg-neutral-100 text-neutral-900",
     preview: "bg-neutral-900",
   },
   grape: {
@@ -66,6 +83,7 @@ export const THEMES: Record<string, Theme> = {
     subtext: "text-violet-200/70",
     button:
       "bg-white/15 border border-white/25 text-white hover:bg-white/25 backdrop-blur",
+    badge: "bg-white/25 text-white",
     preview: "bg-violet-600",
   },
 };

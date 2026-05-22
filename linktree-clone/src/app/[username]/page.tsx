@@ -3,6 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { getTheme } from "@/lib/themes";
+import { resolveIcon } from "@/lib/link-icons";
+import { LinkIcon } from "@/components/icons";
 
 type Props = { params: { username: string } };
 
@@ -87,17 +89,25 @@ export default async function PublicProfile({ params }: Props) {
 
       {user.links.length > 0 ? (
         <div className="link-stagger mt-8 w-full space-y-3">
-          {user.links.map((link) => (
-            <a
-              key={link.id}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              className={`block w-full rounded-xl px-5 py-4 text-center font-medium transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 ${theme.button}`}
-            >
-              {link.title}
-            </a>
-          ))}
+          {user.links.map((link) => {
+            const iconName = resolveIcon(link.icon, link.url);
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className={`relative flex w-full items-center justify-center rounded-full px-6 py-4 font-medium transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 ${theme.button}`}
+              >
+                {iconName && (
+                  <span className="absolute left-5 flex items-center justify-center">
+                    <LinkIcon name={iconName} className="h-5 w-5" />
+                  </span>
+                )}
+                <span className="px-6">{link.title}</span>
+              </a>
+            );
+          })}
         </div>
       ) : (
         <p className={`mt-8 text-sm ${theme.subtext}`}>Belum ada link.</p>

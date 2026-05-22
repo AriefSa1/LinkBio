@@ -18,7 +18,7 @@ export default function RegisterPage() {
           href="/"
           className="mb-8 block text-center font-display text-2xl font-extrabold text-slate-50"
         >
-          ✦ linktr.ee/clone
+          ✦ LinkBio
         </Link>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur">
