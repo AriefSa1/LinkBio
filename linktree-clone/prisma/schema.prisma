@@ -20,6 +20,10 @@ model User {
   avatarUrl  String?  @db.VarChar(500)
   avatarData String?  @db.LongText // foto hasil upload (data URL base64)
   theme      String   @default("midnight")
+  bgType     String   @default("theme") // "theme" | "color" | "image"
+  bgColor    String?  @db.VarChar(32)
+  bgImage    String?  @db.LongText // gambar latar hasil upload (data URL)
+  cardMode   Boolean  @default(false)
   isAdmin    Boolean  @default(false)
   links      Link[]
   createdAt  DateTime @default(now())

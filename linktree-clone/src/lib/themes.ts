@@ -17,7 +17,7 @@ export const THEMES: Record<string, Theme> = {
     id: "midnight",
     label: "Midnight",
     page: "bg-[radial-gradient(120%_120%_at_50%_0%,#1e293b_0%,#0f172a_45%,#020617_100%)]",
-    card: "",
+    card: "bg-white/5 border border-white/10 backdrop-blur-xl",
     text: "text-slate-50",
     subtext: "text-slate-400",
     button:
@@ -28,7 +28,7 @@ export const THEMES: Record<string, Theme> = {
     id: "sunset",
     label: "Sunset",
     page: "bg-[radial-gradient(120%_120%_at_50%_0%,#fb7185_0%,#f97316_45%,#7c2d12_100%)]",
-    card: "",
+    card: "bg-black/15 border border-white/20 backdrop-blur-xl",
     text: "text-orange-50",
     subtext: "text-orange-100/70",
     button:
@@ -39,7 +39,7 @@ export const THEMES: Record<string, Theme> = {
     id: "forest",
     label: "Forest",
     page: "bg-[radial-gradient(120%_120%_at_50%_0%,#34d399_0%,#059669_45%,#064e3b_100%)]",
-    card: "",
+    card: "bg-black/15 border border-white/20 backdrop-blur-xl",
     text: "text-emerald-50",
     subtext: "text-emerald-100/70",
     button:
@@ -50,7 +50,7 @@ export const THEMES: Record<string, Theme> = {
     id: "mono",
     label: "Mono",
     page: "bg-neutral-100",
-    card: "",
+    card: "bg-white border border-neutral-200",
     text: "text-neutral-900",
     subtext: "text-neutral-500",
     button:
@@ -61,7 +61,7 @@ export const THEMES: Record<string, Theme> = {
     id: "grape",
     label: "Grape",
     page: "bg-[radial-gradient(120%_120%_at_50%_0%,#a78bfa_0%,#7c3aed_45%,#2e1065_100%)]",
-    card: "",
+    card: "bg-white/10 border border-white/15 backdrop-blur-xl",
     text: "text-violet-50",
     subtext: "text-violet-200/70",
     button:

@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
-import { THEMES } from "@/lib/themes";
 import { logoutAction } from "../(auth)/actions";
 import {
   updateProfile,
@@ -13,6 +12,7 @@ import {
 } from "./actions";
 import { SubmitButton } from "@/components/SubmitButton";
 import { AvatarUpload } from "@/components/AvatarUpload";
+import { AppearanceEditor } from "@/components/AppearanceEditor";
 
 export default async function DashboardPage() {
   const user = await getCurrentUser();
@@ -107,26 +107,15 @@ export default async function DashboardPage() {
               name={user.name ?? user.username}
             />
 
-            <div>
-              <span className="mb-2 block text-sm font-medium">Tema</span>
-              <div className="flex flex-wrap gap-2">
-                {Object.values(THEMES).map((t) => (
-                  <label key={t.id} className="cursor-pointer">
-                    <input
-                      type="radio"
-                      name="theme"
-                      value={t.id}
-                      defaultChecked={user.theme === t.id}
-                      className="peer sr-only"
-                    />
-                    <span className="flex items-center gap-2 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition peer-checked:border-neutral-900 peer-checked:ring-2 peer-checked:ring-neutral-900/10">
-                      <span className={`h-4 w-4 rounded-full ${t.preview}`} />
-                      {t.label}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <AppearanceEditor
+              initialTheme={user.theme}
+              initialBgType={user.bgType}
+              initialBgColor={user.bgColor}
+              initialBgImage={user.bgImage}
+              initialCardMode={user.cardMode}
+              name={user.name ?? user.username}
+              avatarSrc={user.avatarData ?? user.avatarUrl}
+            />
 
             <SubmitButton
               className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-neutral-700 disabled:opacity-60"

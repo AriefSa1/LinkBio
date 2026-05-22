@@ -21,13 +21,28 @@ export async function updateProfile(formData: FormData) {
   let theme = String(formData.get("theme") ?? "").trim();
   if (!THEMES[theme]) theme = DEFAULT_THEME;
 
+  // --- Tampilan: latar & mode kartu ---
+  const bgTypeRaw = String(formData.get("bgType") ?? "theme").trim();
+  const bgType = ["theme", "color", "image"].includes(bgTypeRaw)
+    ? bgTypeRaw
+    : "theme";
+  const bgColorRaw = String(formData.get("bgColor") ?? "").trim();
+  const bgColor = /^#[0-9a-fA-F]{6}$/.test(bgColorRaw) ? bgColorRaw : null;
+  const cardMode = String(formData.get("cardMode") ?? "") === "1";
+
+  // --- Foto profil & gambar latar (data URL hasil resize di browser) ---
   const avatarData = String(formData.get("avatarData") ?? "");
   const avatarRemove = String(formData.get("avatarRemove") ?? "") === "1";
+  const bgImage = String(formData.get("bgImage") ?? "");
+  const bgImageRemove = String(formData.get("bgImageRemove") ?? "") === "1";
 
   const data: Prisma.UserUpdateInput = {
     name: name || user.username,
     bio: bio || null,
     theme,
+    bgType,
+    bgColor,
+    cardMode,
   };
 
   if (avatarRemove) {
@@ -35,12 +50,18 @@ export async function updateProfile(formData: FormData) {
     data.avatarData = null;
     data.avatarUrl = null;
   } else if (avatarData) {
-    // Foto baru di-upload. Validasi ringan: harus data URL gambar & wajar ukurannya.
     if (avatarData.startsWith("data:image/") && avatarData.length < 3_000_000) {
       data.avatarData = avatarData;
     }
   }
-  // Jika tidak ada perubahan foto, biarkan foto lama apa adanya.
+
+  if (bgImageRemove) {
+    data.bgImage = null;
+  } else if (bgImage) {
+    if (bgImage.startsWith("data:image/") && bgImage.length < 3_000_000) {
+      data.bgImage = bgImage;
+    }
+  }
 
   await prisma.user.update({ where: { id: user.id }, data });
 
